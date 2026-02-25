@@ -43,9 +43,9 @@ The project deliberately maintains a **zero-dependency architecture** — no ext
 
 The repository is intentionally minimal with no subdirectories (no `src/`, `lib/`, `docs/`, or `test/` folders):
 
-```
+```text
 hao-backprop-test/
-├── server.js          # Node.js HTTP server (sole runtime component, 14 lines)
+├── server.js          # Node.js HTTP server (sole runtime component, 67 lines)
 ├── package.json       # npm package manifest (zero dependencies)
 ├── package-lock.json  # npm lockfile (lockfileVersion 3, empty dependency tree)
 └── README.md          # Project documentation (this file)
@@ -91,7 +91,7 @@ node server.js
 
 **Expected console output:**
 
-```
+```text
 Server running at http://127.0.0.1:3000/
 ```
 
@@ -105,7 +105,7 @@ curl http://127.0.0.1:3000/
 
 **Expected output:**
 
-```
+```text
 Hello, World!
 ```
 
@@ -137,7 +137,7 @@ curl -v http://127.0.0.1:3000/
 
 **Expected output (key lines):**
 
-```
+```text
 > GET / HTTP/1.1
 > Host: 127.0.0.1:3000
 >
@@ -203,7 +203,7 @@ Create a systemd service unit file to manage the server as a system service. Ref
 
 ### Port Configuration
 
-Port `3000` is hardcoded in `server.js` (line 4: `const port = 3000`). To change the port:
+Port `3000` is hardcoded in `server.js` (line 31: `const port = 3000`). To change the port:
 
 1. Open `server.js`
 2. Modify the `port` constant to the desired port number
@@ -227,7 +227,7 @@ There is no environment variable support for port configuration.
 
 **Symptom:**
 
-```
+```text
 Error: listen EADDRINUSE: address already in use 127.0.0.1:3000
 ```
 
@@ -255,13 +255,13 @@ Alternatively, change the `port` constant in `server.js` to an available port.
 
 **Symptom:**
 
-```
+```text
 command not found: node
 ```
 
 or on Windows:
 
-```
+```text
 'node' is not recognized as an internal or external command
 ```
 
@@ -275,7 +275,7 @@ or on Windows:
 
 **Symptom:**
 
-```
+```text
 Error: listen EACCES: permission denied 127.0.0.1:3000
 ```
 
@@ -289,7 +289,7 @@ Error: listen EACCES: permission denied 127.0.0.1:3000
 
 **Symptom:**
 
-```
+```text
 Error: Cannot find module '/wrong/path/server.js'
 ```
 
@@ -308,7 +308,7 @@ node server.js
 
 **Symptom:**
 
-```
+```text
 curl: (7) Failed to connect to 127.0.0.1 port 3000: Connection refused
 ```
 
@@ -330,7 +330,7 @@ curl http://127.0.0.1:3000/
 
 ## Code Overview
 
-The server is a **single-file application** built on the Node.js built-in `http` module with no external dependencies. It follows a synchronous startup sequence with asynchronous request handling. The request handler is **stateless** — every request receives the identical response regardless of method, path, or headers.
+The server is a **single-file server** built on the Node.js built-in `http` module with no external dependencies. It follows a synchronous startup sequence with asynchronous request handling. The request handler is **stateless** — every request receives the identical response regardless of method, path, or headers.
 
 ### Architecture Summary
 
@@ -350,7 +350,7 @@ flowchart TD
     B --> C[Define hostname and port constants]
     C --> D[Create HTTP server with request handler]
     D --> E[Bind server to 127.0.0.1:3000]
-    E --> F[Log startup message to console]
+    E --> F[Log startup notification to console]
     F --> G[Server listening for incoming requests]
     G --> H{Incoming HTTP request}
     H --> I[Set status 200]
@@ -361,12 +361,12 @@ flowchart TD
 
 ### Source Code Walkthrough
 
-The following references correspond to the **original** `server.js` line numbers (line numbers may shift after JSDoc documentation is added):
+The following references correspond to the current JSDoc-annotated `server.js` line numbers:
 
-- **Line 1** — `const http = require('http')`: Imports the Node.js built-in `http` module, which provides the HTTP server functionality.
-- **Lines 3–4** — `const hostname` / `const port`: Defines the server binding address (`127.0.0.1`) and listening port (`3000`) as named constants.
-- **Lines 6–10** — `http.createServer((req, res) => {...})`: Creates the HTTP server with a request handler that sets a 200 status code, a `text/plain` content type, and sends the `"Hello, World!\n"` response body.
-- **Lines 12–14** — `server.listen(port, hostname, () => {...})`: Binds the server to the specified hostname and port, then logs a startup notification to the console once the server is ready to accept connections.
+- **Line 13** — `const http = require('http')`: Imports the Node.js built-in `http` module, which provides the HTTP server functionality.
+- **Lines 22, 31** — `const hostname` / `const port`: Defines the server binding address (`127.0.0.1`) and listening port (`3000`) as named constants.
+- **Lines 45–53** — `http.createServer((req, res) => {...})`: Creates the HTTP server with a request handler that sets a 200 status code, a `text/plain` content type, and sends the `"Hello, World!\n"` response body.
+- **Lines 64–67** — `server.listen(port, hostname, () => {...})`: Binds the server to the specified hostname and port, then logs a startup notification to the console once the server is ready to accept connections.
 
 ---
 
