@@ -12,22 +12,22 @@
 // Import Node.js built-in HTTP module — no external dependencies required
 const http = require('http');
 
+// Security boundary — limits access to local connections only
 /**
  * The hostname/IP address the server binds to. Set to '127.0.0.1' (IPv4 loopback)
  * to restrict access to the local machine only, preventing external network exposure.
  * @constant {string}
  * @default '127.0.0.1'
  */
-// Security boundary — limits access to local connections only
 const hostname = '127.0.0.1';
 
+// Conventional development port, above the privileged port range (< 1024)
 /**
  * The TCP port number the server listens on. Port 3000 is a conventional choice
  * for Node.js development servers.
  * @constant {number}
  * @default 3000
  */
-// Conventional development port, above the privileged port range (< 1024)
 const port = 3000;
 
 /**
